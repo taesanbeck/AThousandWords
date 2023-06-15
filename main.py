@@ -9,16 +9,16 @@ def main():
     default.default_page_config()
 
     # Show sidebar and get current page
-    page = side_bar.show_sidebar(['Page 1', 'Page 2', 'Page 3'])
+    page = side_bar.show_sidebar(['Model', 'Metrics', 'About'])
 
     # Display the selected page
-    if page == "Page 1":
+    if page == "Model":
         button, slider, selectbox = side_bar.show_sidebar_1()
         page_1.show_page(button, slider, selectbox)
-    elif page == "Page 2":
+    elif page == "Metrics":
         slider, selectbox = side_bar.show_sidebar_2()
         page_2.show_page(slider, selectbox)
-    elif page == "Page 3":
+    elif page == "About":
         button = side_bar.show_sidebar_3()
         page_3.show_page(button)
 
