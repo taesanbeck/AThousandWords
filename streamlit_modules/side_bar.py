@@ -4,7 +4,7 @@ from PIL import Image
 
 
 def show_sidebar(page_options):
-    st.sidebar.image('streamlit_modules/images/gmu_image.png', output_format='auto',channels='RGB')
+    st.sidebar.image('streamlit_modules/media/gmu_image.png', output_format='auto',channels='RGB')
     # Add navigation
     page = st.sidebar.selectbox("Go to", page_options, key="sidebar_selectbox")
 
