@@ -13,7 +13,7 @@ def main():
 
     # Display the selected page
     if page == "Models":
-        slider, selectbox = side_bar.show_sidebar_1()
+        selectbox = side_bar.show_sidebar_1()
         page_1.show_page(slider, selectbox)
     elif page == "Metrics":
         slider, selectbox = side_bar.show_sidebar_2()

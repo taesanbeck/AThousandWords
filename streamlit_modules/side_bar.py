@@ -11,11 +11,9 @@ def show_sidebar(page_options):
     return page
 
 def show_sidebar_1():   
-    # Add a slider
-    slider = st.sidebar.slider('Model Confidence Level Slider', min_value=0, max_value=100, value=50)
     # Add a selectbox
     selectbox = st.sidebar.selectbox('Select Model', ['Yolo', 'DINO', 'DINOv2'])
-    return slider, selectbox
+    return selectbox
 
 def show_sidebar_2():
     st.sidebar.title("Thousand Words - Page 2")
