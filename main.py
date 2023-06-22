@@ -19,7 +19,7 @@ def main():
         selectbox = side_bar.show_sidebar_2()
         page_2.show_page(selectbox)
     elif page == "About":
-        button = side_bar.show_sidebar_3()
+        selectbox = side_bar.show_sidebar_3()
         page_3.show_page(selectbox)
 
 if __name__ == "__main__":
