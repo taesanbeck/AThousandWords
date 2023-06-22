@@ -23,6 +23,4 @@ def show_sidebar_2():
 
 def show_sidebar_3():
     st.sidebar.title("About")
-    # Add a button
-    button = st.sidebar.button('Button 1')
-    return button
+    
