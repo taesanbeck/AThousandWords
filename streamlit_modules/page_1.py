@@ -26,14 +26,14 @@ def show_page(selected_model):
         st.image(image, caption='Uploaded Image', width=500)
 
         # Replace "model_prediction" with model's prediction function
-        cv_labels = model.predict(image, confidence_level, bounding_box_option)
+        labels, bounding_boxes = model.predict(image, confidence_level, bounding_box_option)
 
         # Display the labels
         st.header('Computer Vision Labels:')
-        st.text(cv_labels)
+        st.text(labels)
 
         # Pass the labels to  NLP model for description
-        # nlp_description = nlp_model.describe(cv_labels)
+        # nlp_description = nlp_model.describe(labels)
 
         # Display the description
         # st.header('NLP Description:')
