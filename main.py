@@ -9,7 +9,7 @@ def main():
     default.default_page_config()
 
     # Show sidebar and get current page
-    page = side_bar.show_sidebar(['Models', 'Metrics', 'About'])
+    page = side_bar.show_sidebar(['Model Testing', 'App', 'About'])
 
     # Display the selected page
     if page == "Models":
