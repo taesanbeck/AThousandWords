@@ -11,9 +11,14 @@ def show_sidebar(page_options):
     return page
 
 def show_sidebar_1():   
-    # Add a selectbox
-    selectbox = st.sidebar.selectbox('Select CV Model', ['Yolo', 'DINO'])
-    return selectbox
+    st.sidebar.image('streamlit_modules/media/gmu_image.png', output_format='auto',channels='RGB')
+    # Add navigation
+    page = st.sidebar.selectbox("Go to", page_options, key="sidebar_selectbox")
+
+    # Add a selectbox for CV model
+    selected_model = st.sidebar.selectbox('Select CV Model', ['Yolo', 'DINO'])
+
+    return page, selected_model
 
 def show_sidebar_2():
     st.sidebar.title("Integrated Application")
