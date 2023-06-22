@@ -17,7 +17,7 @@ def main():
         page_1.show_page(selectbox)
     elif page == "App":
         slider, selectbox = side_bar.show_sidebar_2()
-        page_2.show_page(slider, selectbox)
+        page_2.show_page(selectbox)
     elif page == "About":
         button = side_bar.show_sidebar_3()
         page_3.show_page(button)
