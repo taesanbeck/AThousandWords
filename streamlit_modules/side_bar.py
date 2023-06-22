@@ -16,11 +16,7 @@ def show_sidebar_1():
     return selectbox
 
 def show_sidebar_2():
-    st.sidebar.title("Thousand Words - Page 2")
-    # Add a slider
-    slider = st.sidebar.slider('Model Slider', min_value=0, max_value=100, value=50)
-    # Add a selectbox
-    selectbox = st.sidebar.selectbox('Select Me', ['Option 1', 'Option 2', 'Option 3'])
+    st.sidebar.title("Integrated Application")
     # Add a button
     button = st.sidebar.button('Run model')
     
