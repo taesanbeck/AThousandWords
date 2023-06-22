@@ -1,10 +1,9 @@
 import streamlit as st
-from PIL import Image
+
 
 def show_page(selectbox):
     # Team photo
-    image = Image.open("streamlit_modules/page_3.png")
-    st.image(image)
+    st.image("streamlit_modules/page_3.png")
     
     # Formatting Center Align
     st.markdown(
