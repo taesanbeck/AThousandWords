@@ -20,7 +20,7 @@ def show_sidebar_2():
     # Add a button
     button = st.sidebar.button('Run model')
     
-    return slider, selectbox
+    return button
 
 def show_sidebar_3():
     st.sidebar.title("About")
