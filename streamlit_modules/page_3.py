@@ -3,7 +3,7 @@ import streamlit as st
 
 def show_page(selectbox):
     # Team photo
-    st.image("streamlit_modules/page_3.png")
+    st.image("streamlit_modules/team_photo.png")
     
     # Formatting Center Align
     st.markdown(
