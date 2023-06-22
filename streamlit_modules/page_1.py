@@ -2,7 +2,7 @@
 import streamlit as st
 from PIL import Image
 
-def show_page(slider, selectbox):
+def show_page(selectbox):
     st.title('Model Page')
 
     st.header('Upload an image:')
