@@ -1,7 +1,7 @@
 import streamlit as st
 
 def show_page(button):
-    st.image('streamlit_modules/media/team_photo.png')
+    st.image('streamlit_modules\media\team_photo.png')
     # Use the button value as needed
     
     st.markdown(
