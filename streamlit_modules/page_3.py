@@ -3,7 +3,7 @@ from PIL import Image
 
 def show_page(selectbox):
     # Team photo
-    image = Image.open("streamlit_modules/page_3.py")
+    image = Image.open("streamlit_modules/page_3.png")
     st.image(image)
     
     # Formatting Center Align
