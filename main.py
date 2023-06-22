@@ -1,3 +1,4 @@
+# main.py
 from streamlit_modules import default
 from streamlit_modules import side_bar
 from streamlit_modules import page_1
@@ -9,21 +10,20 @@ def main():
     default.default_page_config()
 
     # Show sidebar and get current page
-    page = side_bar.show_sidebar(['Model Testing', 'App', 'About'])
+    page, selected_model = side_bar.show_sidebar(['Model Testing', 'App', 'About'])
 
     # Display the selected page
     if page == "Model Testing":
-        selectbox = side_bar.show_sidebar_1()
-        page_1.show_page(selectbox)
+        page_1.show_page(selected_model)
     elif page == "App":
-        selectbox = side_bar.show_sidebar_2()
-        page_2.show_page(selectbox)
+        # you might need to add model selection for the App page as well
+        page_2.show_page(None)
     elif page == "About":
-        selectbox = side_bar.show_sidebar_3()
-        page_3.show_page(selectbox)
+        page_3.show_page()
 
 if __name__ == "__main__":
     main()
+
 
 
 
