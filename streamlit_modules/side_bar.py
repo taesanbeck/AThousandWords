@@ -19,7 +19,6 @@ def show_sidebar_2():
     st.sidebar.title("Integrated Application")
     # Add a button
     button = st.sidebar.button('Run model')
-    
     return button
 
 def show_sidebar_3():
