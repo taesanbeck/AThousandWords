@@ -12,7 +12,7 @@ def show_sidebar(page_options):
 
 def show_sidebar_1():   
     # Add a selectbox
-    selectbox = st.sidebar.selectbox('Select Model', ['Yolo', 'DINO', 'DINOv2'])
+    selectbox = st.sidebar.selectbox('Select CV Model', ['Yolo', 'DINO'])
     return selectbox
 
 def show_sidebar_2():
@@ -21,6 +21,9 @@ def show_sidebar_2():
     slider = st.sidebar.slider('Model Slider', min_value=0, max_value=100, value=50)
     # Add a selectbox
     selectbox = st.sidebar.selectbox('Select Me', ['Option 1', 'Option 2', 'Option 3'])
+    # Add a button
+    button = st.sidebar.button('Run model')
+    
     return slider, selectbox
 
 def show_sidebar_3():
