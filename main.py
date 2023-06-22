@@ -20,7 +20,7 @@ def main():
         page_2.show_page(selectbox)
     elif page == "About":
         button = side_bar.show_sidebar_3()
-        page_3.show_page(button)
+        page_3.show_page(selectbox)
 
 if __name__ == "__main__":
     main()

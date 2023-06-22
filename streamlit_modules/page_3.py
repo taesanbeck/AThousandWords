@@ -1,9 +1,10 @@
 import streamlit as st
 
-def show_page(button):
-    st.image('streamlit_modules\media\team_photo.png')
-    # Use the button value as needed
+def show_page(selectbox):
+    # Team photo
+    st.image('streamlit_modules/media/team_photo.png')
     
+    # Formatting Center Align
     st.markdown(
         """
         <style>
