@@ -32,8 +32,8 @@ def show_page(selected_model):
         st.header('Computer Vision Labels:')
         st.text(cv_labels)
 
-        # Pass the labels to your NLP model for description
-        # nlp_description = your_nlp_model.describe(cv_labels)
+        # Pass the labels to  NLP model for description
+        # nlp_description = nlp_model.describe(cv_labels)
 
         # Display the description
         # st.header('NLP Description:')

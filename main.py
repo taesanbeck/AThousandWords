@@ -16,7 +16,7 @@ def main():
     if page == "Model Testing":
         page_1.show_page(selected_model)
     elif page == "App":
-        # you might need to add model selection for the App page as well
+        # need to add model selection for the App page as well
         page_2.show_page(None)
     elif page == "About":
         page_3.show_page()
