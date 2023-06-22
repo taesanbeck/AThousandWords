@@ -3,14 +3,7 @@ import streamlit as st
 from PIL import Image
 
 
-def show_sidebar(page_options):
-    st.sidebar.image('streamlit_modules/media/gmu_image.png', output_format='auto',channels='RGB')
-    # Add navigation
-    page = st.sidebar.selectbox("Go to", page_options, key="sidebar_selectbox")
-
-    return page
-
-def show_sidebar_1():   
+def show_sidebar_1(page_options):  
     st.sidebar.image('streamlit_modules/media/gmu_image.png', output_format='auto',channels='RGB')
     # Add navigation
     page = st.sidebar.selectbox("Go to", page_options, key="sidebar_selectbox")
