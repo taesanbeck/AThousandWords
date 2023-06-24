@@ -2,6 +2,10 @@
 import streamlit as st
 from PIL import Image
 from objects import yolo, dino
+from objects.yolo import standalone_yolo, output_class_list
+
+standalone = True # if we can't do sagemaker for some reason, otherwise set to false
+
 
 def show_page(selected_model):
     st.title('Model Testing')
@@ -15,18 +19,28 @@ def show_page(selected_model):
     st.header('Bounding Boxes:')
     bounding_box_option = st.radio('Would you like bounding boxes displayed?', ('Yes', 'No'))
 
-    # Load the chosen model
-    if selected_model == 'Yolo':
-        model = yolo()
-    elif selected_model == 'DINO':
-        model = dino()
+    if bounding_box_option == 'Yes':
+        bounding_box_option = True
+    if bounding_box_option == 'No':
+        bounding_box_option = False
+
 
     if uploaded_file is not None:
         image = Image.open(uploaded_file)
         st.image(image, caption='Uploaded Image', width=500)
 
         # Replace "model_prediction" with model's prediction function
-        labels, bounding_boxes = model.predict(image, confidence_level, bounding_box_option)
+        # there is an option to remove bounding boxes from the image output of Yolo, but there is no point
+        # just show the original if you don't want bounding boxes
+
+        if selected_model == 'YOLO':
+            if standalone == True:
+                output_dict = standalone_yolo(image, confidence=confidence_level, save_img=bounding_box_option)
+
+        #if selected_model == 'DINO':
+            # do something else
+
+        labels = output_class_list([output_dict])
 
         # Display the labels
         st.header('Computer Vision Labels:')

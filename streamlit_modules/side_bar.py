@@ -9,7 +9,7 @@ def show_sidebar(page_options):
 
     # Add a selectbox for CV model
     if page == "Model Testing":
-        selected_model = st.sidebar.selectbox('Select CV Model', ['Yolo', 'DINO'])
+        selected_model = st.sidebar.selectbox('Select CV Model', ['YOLO', 'DINO'])
     else:
         selected_model = None
 
