@@ -40,7 +40,7 @@ def show_page(selected_model):
         #if selected_model == 'DINO':
             # do something else
 
-        labels = output_class_list([output_dict])
+        labels = output_class_list(output_dict)
 
         # Display the labels
         st.header('Computer Vision Labels:')
