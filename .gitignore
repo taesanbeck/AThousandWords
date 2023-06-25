@@ -2,4 +2,5 @@ awsenv/
 .env
 yolov8x.pt
 .gitattributes
-
+gmu_image.png
+team_photo.png

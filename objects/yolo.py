@@ -32,9 +32,6 @@ aws_access_key = os.getenv('AWS_ACCESS_KEY_ID')
 aws_secret_key = os.getenv('AWS_SECRET_ACCESS_KEY')
 
 
-# Load environment variables from .env file
-load_dotenv()
-
 # Retrieve AWS_SECRET_ACCESS_KEY from environment variables
 aws_secret_key = os.getenv('AWS_SECRET_ACCESS_KEY')
 
