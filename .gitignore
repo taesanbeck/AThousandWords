@@ -1,3 +1,5 @@
 awsenv/
 .env
 yolov8x.pt
+.gitattributes
+
