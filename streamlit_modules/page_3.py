@@ -3,7 +3,7 @@ import streamlit as st
 
 def show_page():
     # Team photo
-    st.image("streamlit_modules/media/team_photo.png")
+    st.image("streamlit_modules/media/team_photo.PNG")
     
     # Formatting Center Align
     st.markdown(
