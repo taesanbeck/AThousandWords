@@ -1,7 +1,7 @@
 import streamlit as st
 
 
-def show_page(selectbox):
+def show_page():
     # Team photo
     st.image("streamlit_modules/media/team_photo.png")
     

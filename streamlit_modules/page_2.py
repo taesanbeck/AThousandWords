@@ -2,7 +2,7 @@
 import streamlit as st
 from PIL import Image
 
-def show_page(selectbox):
+def show_page():
     st.title('User Application')
 
     st.header('Upload an image:')
@@ -12,11 +12,7 @@ def show_page(selectbox):
         image = Image.open(uploaded_file)
         st.image(image, caption='Uploaded Image', width=500)
 
-        st.header('Confidence Level:')
-        confidence_level = st.slider('Adjust the confidence level', min_value=0.0, max_value=1.0, value=0.5)
-
-        st.header('Bounding Boxes:')
-        bounding_box_option = st.radio('Would you like bounding boxes displayed?', ('Yes', 'No'))
+    
 
     
 

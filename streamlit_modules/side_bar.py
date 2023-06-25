@@ -8,20 +8,17 @@ def show_sidebar(page_options):
     page = st.sidebar.selectbox("Go to", page_options, key="sidebar_selectbox")
 
     # Add a selectbox for CV model
+    selected_cv_model = None
+    selected_nlp_model = None
     if page == "Model Testing":
-        selected_model = st.sidebar.selectbox('Select CV Model', ['YOLO', 'DINO'])
-    else:
-        selected_model = None
+        selected_cv_model = st.sidebar.selectbox('Select CV Model', ['YOLO', 'DINO'])
+        selected_nlp_model = st.sidebar.selectbox('Select NLP Model', ['T5', 'GPT2'])
 
-    return page, selected_model
+    # Add a button for running the application if 'About' page is selected
+    if page == "App":
+        st.sidebar.button('Run Application')
 
-def show_sidebar_2():
-    st.sidebar.title("Integrated Application")
-    # Add a button
-    button = st.sidebar.button('Run model')
-    return button
+    return page, selected_cv_model, selected_nlp_model
 
-def show_sidebar_3():
-    st.sidebar.title("About")
 
     

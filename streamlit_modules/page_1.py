@@ -1,11 +1,13 @@
-# page_1.py
-import streamlit as st
+from objects.yolo import standalone_yolo2, draw_boxes, output_class_list
 from PIL import Image
-from objects import yolo, dino
-from objects.yolo import standalone_yolo, output_class_list
+import streamlit as st
+from ultralytics import YOLO
 
-standalone = True # if we can't do sagemaker for some reason, otherwise set to false
-
+@st.cache_resource(ttl="1.5 days", max_entries=10, show_spinner="Loading model...")
+def standalone_yolo():
+    # Load and return YOLO model
+    model = YOLO('yolov8x.pt')
+    return model
 
 def show_page(selected_model):
     st.title('Model Testing')
@@ -19,36 +21,21 @@ def show_page(selected_model):
     st.header('Bounding Boxes:')
     bounding_box_option = st.radio('Would you like bounding boxes displayed?', ('Yes', 'No'))
 
-    if bounding_box_option == 'Yes':
-        bounding_box_option = True
-    if bounding_box_option == 'No':
-        bounding_box_option = False
-
-
     if uploaded_file is not None:
         image = Image.open(uploaded_file)
-        st.image(image, caption='Uploaded Image', width=500)
-
-        # Replace "model_prediction" with model's prediction function
-        # there is an option to remove bounding boxes from the image output of Yolo, but there is no point
-        # just show the original if you don't want bounding boxes
-
+             
         if selected_model == 'YOLO':
-            if standalone == True:
-                output_dict = standalone_yolo(image, confidence=confidence_level, save_img=bounding_box_option)
+        # Run the YOLO model on the image
+            image, results = standalone_yolo2(image, confidence=confidence_level)
+            
+            # Draw bounding boxes on the image
+            if bounding_box_option == 'Yes':
+                image = draw_boxes(image, results)
 
-        #if selected_model == 'DINO':
-            # do something else
+            st.image(image, caption='Uploaded Image', use_column_width=True)  # Display the uploaded image
 
-        labels = output_class_list(output_dict)
+            labels = output_class_list(results)
 
-        # Display the labels
-        st.header('Computer Vision Labels:')
-        st.text(labels)
-
-        # Pass the labels to  NLP model for description
-        # nlp_description = nlp_model.describe(labels)
-
-        # Display the description
-        # st.header('NLP Description:')
-        # st.text(nlp_description)
+            # Display the labels
+            st.header('Computer Vision Labels:')
+            st.text(labels)
