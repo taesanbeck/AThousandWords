@@ -1,5 +1,4 @@
 awsenv/
 .env
 .gitattributes
-yolov8x.pt
-objects/saved_imgs
+

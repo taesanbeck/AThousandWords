@@ -1,8 +1,13 @@
-from objects.yolo import standalone_yolo, output_class_list
+from objects.yolo import standalone_yolo2, draw_boxes, output_class_list
 from PIL import Image
 import streamlit as st
+from ultralytics import YOLO
 
 @st.cache_resource(ttl="1.5 days", max_entries=10, show_spinner="Loading model...")
+def standalone_yolo():
+    # Load and return YOLO model
+    model = YOLO('yolov8x.pt')
+    return model
 
 def show_page(selected_model):
     st.title('Model Testing')
@@ -16,29 +21,21 @@ def show_page(selected_model):
     st.header('Bounding Boxes:')
     bounding_box_option = st.radio('Would you like bounding boxes displayed?', ('Yes', 'No'))
 
-    def run_model():
-        if uploaded_file is not None:
-#        image = Image.open(uploaded_file)  # to make things easier on you, I'm making these functions accept the path
-#and do the open, instead of opening it here
+    if uploaded_file is not None:
+        image = Image.open(uploaded_file)
              
-            if selected_model == 'YOLO':
+        if selected_model == 'YOLO':
         # Run the YOLO model on the image
+            image, results = standalone_yolo2(image, confidence=confidence_level)
+            
+            # Draw bounding boxes on the image
+            if bounding_box_option == 'Yes':
+                image = draw_boxes(image, results)
 
-                if bounding_box_option == 'Yes':
-                    results, image = standalone_yolo(uploaded_file, confidence=confidence_level, save_img=True,
-                                                  save_conf=True)
-                if bounding_box_option == 'No':
-                    results, image = standalone_yolo(uploaded_file, confidence=confidence_level, save_img=False,
-                                                 save_conf=False)
+            st.image(image, caption='Uploaded Image', use_column_width=True)  # Display the uploaded image
 
-            #now, it will display an image no matter what is chosen
-                with Image.open(image) as ifile:
-                    st.image(ifile, caption='Uploaded Image', use_column_width=True)  # Display the uploaded image
-
-                labels = output_class_list(results)
+            labels = output_class_list(results)
 
             # Display the labels
-                st.header('Computer Vision Labels:')
-                st.text(labels)
-
-    st.button(label='Run Model', on_click=run_model)
+            st.header('Computer Vision Labels:')
+            st.text(labels)
