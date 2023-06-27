@@ -6,7 +6,7 @@ import cv2
 os.environ["KMP_DUPLICATE_LIB_OK"] = "True"
 
 def standalone_yolo(image, confidence, save_img, save_conf, image_name):
-    model=YOLO('https://thousandwordsgmu.s3.amazonaws.com/yolov8x.pt') # will download the model if it isn't already there
+    model=YOLO('yolov8x.pt') # will download the model if it isn't already there
     detection = model.predict(image, conf=confidence)
     output = [{'class': box.cls.item(), 'class_name': detection[0].names[box.cls.item()],
                'xyxy': box.xyxy.tolist()[0], 'conf': box.conf.item()} for box in detection[0].boxes]
