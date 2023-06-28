@@ -12,15 +12,19 @@ def run_model(uploaded_file, selected_model, bounding_box_option, confidence_lev
         image_input = Image.open(uploaded_file)
         image_name = uploaded_file.name
 
+        # It would be a good idea to check and see if predict_filename is already in saved_img
+        # if it is, don't run, just show the image.
+        # however, we would also need to save the results dict, possibly as json, so we can call it back up.
+
         if selected_model == 'YOLO':
             # Run the YOLO model on the image
 
             if bounding_box_option == 'Yes':
                 results, image_output = standalone_yolo(image_input, image_name=image_name,
-                                                        confidence=confidence_level, save_img=True, save_conf=True)
+                                                        confidence=confidence_level, save_img=True)
             if bounding_box_option == 'No':
                 results, image_output = standalone_yolo(image_input, image_name=image_name,
-                                                        confidence=confidence_level, save_img=False, save_conf=False)
+                                                        confidence=confidence_level, save_img=False)
 
             st.image(image_output, caption='Uploaded Image', use_column_width=True)  # Display the uploaded image
 
