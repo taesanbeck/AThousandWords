@@ -14,7 +14,6 @@ def standalone_yolo(image, confidence, save_img, image_name):
         result_image = image
     if save_img == True:
         if not os.path.exists(os.path.join('objects', 'saved_img')):
-            os.mkdir('objects')
             os.mkdir(os.path.join('objects', 'saved_img'))
         raw_output = detection[0].plot(pil=True)
         cv2.imwrite(os.path.join('objects', 'saved_img', 'predict_'+image_name), raw_output)
