@@ -1,4 +1,5 @@
 awsenv/
 .env
 .gitattributes
-
+yolo8x.pt
+Repo.code-workspace
