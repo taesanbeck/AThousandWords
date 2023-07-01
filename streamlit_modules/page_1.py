@@ -1,6 +1,8 @@
 from objects.yolo import standalone_yolo, output_class_list
 from PIL import Image
 import streamlit as st
+from tts.gtts import texttospeech  
+
 
 #@st.cache_resource(ttl="1.5 days", max_entries=10, show_spinner="Loading model...")
 #model=YOLO('https://thousandwordsgmu.s3.amazonaws.com/yolov8x.pt')
@@ -23,7 +25,7 @@ def run_model(uploaded_file, selected_model, bounding_box_option, confidence_lev
                 results, image_output = standalone_yolo(image_input, image_name=image_name,
                                                         confidence=confidence_level, save_img=True)
             if bounding_box_option == 'No':
-                results, image_output = standalone_yolo(image_input, image_name=image_name,
+                results, image_output = standalone_yolo2(image_input, image_name=image_name,
                                                         confidence=confidence_level, save_img=False)
 
             st.image(image_output, caption='Uploaded Image', use_column_width=True)  # Display the uploaded image
@@ -33,6 +35,14 @@ def run_model(uploaded_file, selected_model, bounding_box_option, confidence_lev
             # Display the labels
             st.header('Computer Vision Labels:')
             st.text(labels)
+            
+            # Generate audio file for labels and play it
+            labels_str = ', '.join(labels)  # Convert list of labels to string
+            texttospeech(labels_str)  # Convert labels to audio
+            audio_file = open("output.mp3", "rb")
+            st.audio(audio_file.read(), format='audio/mp3')  # Play audio
+            audio_file.close()
+
 
 def show_page(selected_model):
     st.title('Model Testing')
@@ -48,4 +58,6 @@ def show_page(selected_model):
 
     st.button(label="Run Model", on_click=run_model, kwargs={'uploaded_file': uploaded_file, 'confidence_level': confidence_level,
                                                              'bounding_box_option': bounding_box_option, 'selected_model': selected_model})
+    
+    
 
