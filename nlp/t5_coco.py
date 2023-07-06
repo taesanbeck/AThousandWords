@@ -68,3 +68,24 @@ model_instance.load_state_dict(torch.load('nlp/t5_coco.pt'))
 input_keywords = ['Zebras', 'seen', 'eating', 'hay', 'large', 'stall']
 caption = generate_caption(model_instance, input_keywords)
 print("Generated Caption:", caption)
+
+######### RUN THE MODEL
+import streamlit as st
+from tts.texttospeech import texttospeech
+
+def run_t5(labels):
+    caption = generate_caption(model_instance, labels)
+
+    # Display the generated sentence
+    st.title('Generated Caption:')
+    st.text(caption)
+
+    # Display the labels
+    st.subheader('Computer Vision Labels:')
+    st.text(labels)
+
+    # Generate audio file for caption and play it
+    texttospeech(caption)  # Convert caption to audio
+    audio_file = open("output.mp3", "rb")
+    st.audio(audio_file.read(), format='audio/mp3')  # Play audio
+    audio_file.close()
