@@ -12,8 +12,8 @@ def find_bbox_centroid(xmin, ymin, xmax, ymax):
 
 def find_distance_bbox(b1xmin, b1ymin, b1xmax, b1ymax, b2xmin, b2ymin, b2xmax, b2ymax):
     # find the euclidean distance between the centroids of two bounding boxes
-    b1_centroid = find_bbox_centroid(b1xmax, b1xmin, b1ymax, b1ymin)
-    b2_centroid = find_bbox_centroid(b2xmax, b2xmin, b2ymax, b2ymin)
+    b1_centroid = find_bbox_centroid(b1xmin, b1ymin, b1xmax, b1ymax)
+    b2_centroid = find_bbox_centroid(b2xmin, b2ymin, b2xmax, b2ymax)
     euclid_distance = np.linalg.norm(b1_centroid-b2_centroid)
 
     return euclid_distance
@@ -26,7 +26,16 @@ def find_angle(p1x, p1y, p2x, p2y):
     radians = math.atan2(dy, dx)
     degrees = np.rad2deg(radians)
 
-    return degrees
+    if 315 <= degrees < 360 or 0 <= degrees < 45:
+        direction = 'above'
+    if 45 <= degrees < 135:
+        direction = 'to the right'
+    if 135 <= degrees < 225:
+        direction = 'below'
+    if 225 <= degrees < 315:
+        direction = 'to the left'
+
+    return degrees, direction
 
 def find_quadrant(image, x, y):
     # given an image and a point determine which part of the image the point is in
