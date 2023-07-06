@@ -1,8 +1,7 @@
-from objects.yolo import standalone_yolo, output_class_list
+from objects.yolo import standalone_yolo, output_class_list, output_class_list_w_meta
 from PIL import Image
 import streamlit as st
-from tts.gtts import texttospeech  
-
+from tts.gtts import texttospeech
 
 #@st.cache_resource(ttl="1.5 days", max_entries=10, show_spinner="Loading model...")
 #model=YOLO('https://thousandwordsgmu.s3.amazonaws.com/yolov8x.pt')
@@ -25,16 +24,20 @@ def run_model(uploaded_file, selected_model, bounding_box_option, confidence_lev
                 results, image_output = standalone_yolo(image_input, image_name=image_name,
                                                         confidence=confidence_level, save_img=True)
             if bounding_box_option == 'No':
-                results, image_output = standalone_yolo2(image_input, image_name=image_name,
+                results, image_output = standalone_yolo(image_input, image_name=image_name,
                                                         confidence=confidence_level, save_img=False)
 
             st.image(image_output, caption='Uploaded Image', use_column_width=True)  # Display the uploaded image
 
-            labels = output_class_list(results)
+            #labels = output_class_list(results)
+
+            # watch this
+            labels = output_class_list_w_meta(results)
 
             # Display the labels
             st.header('Computer Vision Labels:')
-            st.text(labels)
+            for label in labels:
+                st.text(label)
             
             # Generate audio file for labels and play it
             labels_str = ', '.join(labels)  # Convert list of labels to string
