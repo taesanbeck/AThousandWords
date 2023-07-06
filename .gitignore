@@ -3,3 +3,5 @@ awsenv/
 .gitattributes
 yolo8x.pt
 Repo.code-workspace
+t5_coco.pt
+output.mp3
