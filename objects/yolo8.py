@@ -4,6 +4,7 @@ import os
 import cv2
 from utils.location import find_bbox_centroid, find_quadrant
 import numpy as np
+import streamlit as st
 
 os.environ["KMP_DUPLICATE_LIB_OK"] = "True"
 
@@ -43,31 +44,37 @@ def output_class_list_w_meta(olist):
 
 
 
-from PIL import Image
-import streamlit as st
+######## HERE IS THE RUN MODEL Function for you
 
-def run_yolo8(uploaded_file, bounding_box_option, confidence_level):
+def run_yolo8(uploaded_file, selected_cv_model, bounding_box_option, confidence_level, selected_nlp_model):
+    labels = []  # Initialize labels as an empty list
     if uploaded_file is not None:
         image_input = Image.open(uploaded_file)
         image_name = uploaded_file.name
-        
-        # It would be a good idea to check and see if predict_filename is already in saved_img
-        # if it is, don't run, just show the image.
-        # however, we would also need to save the results dict, possibly as json, so we can call it back up.
 
-        if bounding_box_option == 'Yes':
-            results, image_output = standalone_yolo(image_input, image_name=image_name,
-                                                    confidence=confidence_level, save_img=True)
-        if bounding_box_option == 'No':
-            results, image_output = standalone_yolo(image_input, image_name=image_name,
-                                                    confidence=confidence_level, save_img=False)
+        if selected_cv_model == 'YOLOV3':
+            # Call the run_yolo3 function and pass the necessary arguments
+            labels = run_yolo8(image_input, image_name, confidence_level, bounding_box_option)
+            
+        elif selected_cv_model == 'YOLOV8':
+            # Run the YOLO model on the image
+            if bounding_box_option == 'Yes':
+                results, image_output = standalone_yolo(image_input, confidence=confidence_level, save_img=True, image_name=image_name)
+            if bounding_box_option == 'No':
+                results, image_output = standalone_yolo(image_input, confidence=confidence_level, save_img=False, image_name=image_name)
 
-        st.image(image_output, caption='Uploaded Image', use_column_width=True)  # Display the uploaded image
+            st.image(image_output, caption='Uploaded Image', use_column_width=True)  # Display the uploaded image
 
-        # watch this
-        labels = output_class_list_w_meta(results)
-        
-        return labels
+            # watch this
+            labels = output_class_list_w_meta(results)
+    
+    return labels  # Return labels as a list
+
+
+
+
+
+
 
 
 

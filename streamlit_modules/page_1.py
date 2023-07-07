@@ -24,20 +24,22 @@ def show_page(selected_cv_model, selected_nlp_model):
     # Add a button to run the model and generate a caption
     if st.button('Run Models'):
         if selected_cv_model == 'YOLOV8':
-            labels = run_yolo8(uploaded_file, bounding_box_option, confidence_level)
+            # get the labels
+            labels = run_yolo8(uploaded_file, selected_cv_model, bounding_box_option, confidence_level, selected_nlp_model)
             
         elif selected_cv_model == 'YOLOV3':
             # Pass all three required arguments to the run_yolo3 function
             image_input = Image.open(uploaded_file)
             image_name = uploaded_file.name
-            labels = run_yolo3(image_input, image_name, confidence_level)
+            labels = run_yolo3(image_input, image_name, confidence_level, bounding_box_option)
 
         if selected_nlp_model == 'T5':
             run_t5(labels)
             
         elif selected_nlp_model == 'GPT2':
-            # Add code here to generate a caption using GPT2
+            # Add code here to generate a caption using GPT2 or other model
                 pass
+
 
 
 
