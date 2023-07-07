@@ -42,33 +42,18 @@ def output_class_list_w_meta(olist):
     # return human readable names plus fun stuff
     return [o['id']+': '+o['class_name']+' @ '+o['location'] for o in olist]
 
-
-
-######## HERE IS THE RUN MODEL Function for you
-
-def run_yolo8(uploaded_file, selected_cv_model, bounding_box_option, confidence_level, selected_nlp_model):
-    labels = []  # Initialize labels as an empty list
-    if uploaded_file is not None:
-        image_input = Image.open(uploaded_file)
-        image_name = uploaded_file.name
-
-        if selected_cv_model == 'YOLOV3':
-            # Call the run_yolo3 function and pass the necessary arguments
-            labels = run_yolo8(image_input, image_name, confidence_level, bounding_box_option)
-            
-        elif selected_cv_model == 'YOLOV8':
+def run_yolo8(image_input, image_name, bounding_box_option, confidence_level):
+#    labels = []  # Initialize labels as an empty list # this is not necessary.  It makes its own list.
+        #if selected_cv_model == 'YOLOV8': # we don't even get here unless it's selected due to page_1
             # Run the YOLO model on the image
-            if bounding_box_option == 'Yes':
-                results, image_output = standalone_yolo(image_input, confidence=confidence_level, save_img=True, image_name=image_name)
-            if bounding_box_option == 'No':
-                results, image_output = standalone_yolo(image_input, confidence=confidence_level, save_img=False, image_name=image_name)
+    if bounding_box_option == 'Yes':
+        results, image_output = standalone_yolo(image_input, confidence=confidence_level, save_img=True, image_name=image_name)
+    if bounding_box_option == 'No':
+        results, image_output = standalone_yolo(image_input, confidence=confidence_level, save_img=False, image_name=image_name)
 
-            st.image(image_output, caption='Uploaded Image', use_column_width=True)  # Display the uploaded image
-
-            # watch this
-            labels = output_class_list_w_meta(results)
+    st.image(image_output, caption='Uploaded Image', use_column_width=True)  # Display the uploaded image
     
-    return labels  # Return labels as a list
+    return results  # Return labels as a list and the raw results as a list of dicts
 
 
 
