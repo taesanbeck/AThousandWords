@@ -11,7 +11,7 @@ def show_sidebar(page_options):
     selected_cv_model = None
     selected_nlp_model = None
     if page == "Model Testing":
-        selected_cv_model = st.sidebar.selectbox('Select CV Model', ['YOLO', 'DINO'])
+        selected_cv_model = st.sidebar.selectbox('Select CV Model', ['YOLOV8', 'YOLOV3'])
         selected_nlp_model = st.sidebar.selectbox('Select NLP Model', ['T5', 'GPT2'])
 
     # Add a button for running the application if 'About' page is selected

@@ -76,4 +76,3 @@ def find_quadrant(image, x, y):
     else:
         return pos
 
-
