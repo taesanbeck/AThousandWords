@@ -43,9 +43,7 @@ def output_class_list_w_meta(olist):
     return [o['id']+': '+o['class_name']+' @ '+o['location'] for o in olist]
 
 def run_yolo8(image_input, image_name, bounding_box_option, confidence_level):
-#    labels = []  # Initialize labels as an empty list # this is not necessary.  It makes its own list.
-        #if selected_cv_model == 'YOLOV8': # we don't even get here unless it's selected due to page_1
-            # Run the YOLO model on the image
+    # Run the YOLO model on the image
     if bounding_box_option == 'Yes':
         results, image_output = standalone_yolo(image_input, confidence=confidence_level, save_img=True, image_name=image_name)
     if bounding_box_option == 'No':
