@@ -14,4 +14,4 @@ gTTS==2.2.3
 numpy==1.23.3
 python-dotenv==1.0.0
 sentencepiece==0.1.99
-python3-tkinter.x86_64 0:3.7.16
+happytransformer-2.4.1

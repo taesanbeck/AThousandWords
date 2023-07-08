@@ -6,6 +6,7 @@ from tts.texttospeech import texttospeech
 from objects.yolo3 import run_yolo3
 from objects.yolo8 import run_yolo8
 from nlp.t5_coco import run_t5
+from nlp.t5_common_gen import run_t5_common_gen
 import io
 import os
 
@@ -43,9 +44,8 @@ def show_page(selected_cv_model, selected_nlp_model):
         if selected_nlp_model == 'T5':
             run_t5(labels)
             
-        elif selected_nlp_model == 'GPT2':
-            # Add code here to generate a caption using GPT2 or other model
-                pass
+        elif selected_nlp_model == 'T5_Common_Gen':
+            run_t5_common_gen(labels)
 
 
 
