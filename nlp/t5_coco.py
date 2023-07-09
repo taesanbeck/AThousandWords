@@ -19,7 +19,7 @@ class New_T5_Trainer(nn.Module):
 
 tokenizer = T5Tokenizer.from_pretrained('t5-small')
 model = New_T5_Trainer()
-model.load_state_dict(torch.load('nlp/t5_coco.pt'))  # load the weights
+model.load_state_dict(torch.load('AThousandWords/nlp/t5_coco.pt'))  # load the weights
 
 def generate_caption(model, input_keywords):
     # Prepare the input data
@@ -59,7 +59,7 @@ def generate_caption(model, input_keywords):
 model_instance = New_T5_Trainer()
 
 # Load the model weights from the saved file
-model_instance.load_state_dict(torch.load('/home/ec2-user/AThousandWords/nlp/t5_coco.py'))
+model_instance.load_state_dict(torch.load('AThousandWords/nlp/t5_coco.pt'))
 
 
 # Move the model to GPU if available
