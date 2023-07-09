@@ -59,7 +59,7 @@ def generate_caption(model, input_keywords):
 model_instance = New_T5_Trainer()
 
 # Load the model weights from the saved file
-model_instance.load_state_dict(torch.load('/home/ec2-user/AThousandWords/nlp/t5_coco.pt'))
+model_instance.load_state_dict(torch.load('nlp/t5_coco.pt'))
 
 
 # Move the model to GPU if available
