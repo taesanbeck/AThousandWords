@@ -54,11 +54,18 @@ def show_page(selected_cv_model, selected_nlp_model):
             image_name = uploaded_file.name
 
         try:
+            labels = None
             if selected_cv_model == 'YOLOV8':
                 raw_results = run_yolo8(image_input, image_name, bounding_box_option, confidence_level)
                 labels = output_class_list_w_meta(raw_results)
+                #if 'person' in output_class_list(raw_results):
+                    #run yolo actions, output updated labels
             elif selected_cv_model == 'YOLOV3':
                 labels = run_yolo3(image_input, image_name, confidence_level, bounding_box_option)
+
+            #run scene recognition, output updated labels
+
+            #run ocr, output updated labels
 
             if not labels:
                 st.error('No objects detected in the uploaded image.')
