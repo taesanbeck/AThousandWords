@@ -32,6 +32,11 @@ def standalone_yolo(image, confidence, save_img, image_name):
         location = find_quadrant(image, centroid[0], centroid[1])
         object.update({'location': location})
 
+    i = 0
+    while i < len(output):
+        object.update({'object_id': i})
+        i+=1
+
     return output, result_image
 
 def output_class_list(olist):
