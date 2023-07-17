@@ -70,6 +70,7 @@ def show_page(selected_cv_model, selected_nlp_model):
             if not labels:
                 st.error('No objects detected in the uploaded image.')
             else:
+                # put any preprocessing here
                 if selected_nlp_model == 'T5':
                     run_t5(labels)
                 elif selected_nlp_model == 'T5_Common_Gen':
