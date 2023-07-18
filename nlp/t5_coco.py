@@ -61,6 +61,7 @@ model_instance = New_T5_Trainer()
 # Load the model weights from the saved file
 model_instance.load_state_dict(torch.load('nlp/t5_coco.pt'))
 
+
 # Move the model to GPU if available
 # model_instance.to('cuda')
 

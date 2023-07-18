@@ -32,6 +32,11 @@ def standalone_yolo(image, confidence, save_img, image_name):
         location = find_quadrant(image, centroid[0], centroid[1])
         object.update({'location': location})
 
+    i = 0
+    while i < len(output):
+        object.update({'object_id': i})
+        i+=1
+
     return output, result_image
 
 def output_class_list(olist):
@@ -40,7 +45,7 @@ def output_class_list(olist):
 
 def output_class_list_w_meta(olist):
     # return human readable names plus fun stuff
-    return [o['id']+': '+o['class_name']+' @ '+o['location'] for o in olist]
+    return [+o['class_name']+' at '+o['location'] for o in olist]
 
 def run_yolo8(image_input, image_name, bounding_box_option, confidence_level):
     # Run the YOLO model on the image
