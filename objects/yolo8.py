@@ -30,12 +30,7 @@ def standalone_yolo(image, confidence, save_img, image_name):
     for object in output:
         centroid = find_bbox_centroid(object['xyxy'][0], object['xyxy'][1], object['xyxy'][2], object['xyxy'][3])
         location = find_quadrant(image, centroid[0], centroid[1])
-        object.update({'location': location})
-
-    i = 0
-    while i < len(output):
-        object.update({'object_id': i})
-        i+=1
+        object.update({'location': location, 'centroid': (centroid[0], centroid[1])})
 
     return output, result_image
 
