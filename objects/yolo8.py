@@ -13,7 +13,7 @@ def standalone_yolo(image, confidence, save_img, image_name):
     detection = model.predict(image, conf=confidence)
     output = [{'class': box.cls.item(), 'class_name': detection[0].names[box.cls.item()],
                'xyxy': box.xyxy.tolist()[0], 'conf': box.conf.item()} for box in detection[0].boxes]
-    i = 1
+    i = 0
     while i < len(output):
         for object in output:
             object.update({'id': str(i)})
