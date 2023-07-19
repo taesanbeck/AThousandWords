@@ -1,14 +1,13 @@
-from objects.yolo8 import output_class_list, output_class_list_w_meta
+from objects.yolo8 import output_class_list, output_class_list_w_meta, run_yolo8
+from objects.yolo3 import run_yolo3
 from PIL import Image
 import streamlit as st
 from tts.texttospeech import texttospeech  
-#from nlp.t5_coco import generate_caption, model_instance
-from objects.yolo3 import run_yolo3
-from objects.yolo8 import run_yolo8
-from nlp.t5_coco import run_t5
+from nlp.t5_coco import generate_caption, model_instance, run_t5
 from nlp.t5_common_gen import run_t5_common_gen
 import io
 import os
+from scenes.densenet import run_densenet
 
 def show_page(selected_cv_model, selected_nlp_model):
     st.title('Model Testing')
@@ -24,16 +23,6 @@ def show_page(selected_cv_model, selected_nlp_model):
 
     # Add a button to run the model and generate a caption
     from objects.yolo8 import output_class_list, output_class_list_w_meta
-from PIL import Image
-import streamlit as st
-from tts.texttospeech import texttospeech  
-#from nlp.t5_coco import generate_caption, model_instance
-from objects.yolo3 import run_yolo3
-from objects.yolo8 import run_yolo8
-from nlp.t5_coco import run_t5
-from nlp.t5_common_gen import run_t5_common_gen
-import io
-import os
 
 def show_page(selected_cv_model, selected_nlp_model):
     st.title('Model Testing')
@@ -64,6 +53,7 @@ def show_page(selected_cv_model, selected_nlp_model):
                 labels = run_yolo3(image_input, image_name, confidence_level, bounding_box_option)
 
             #run scene recognition, output updated labels
+            labels, raw_results = run_densenet(raw_results, labels, image_input)
 
             #run ocr, output updated labels
 

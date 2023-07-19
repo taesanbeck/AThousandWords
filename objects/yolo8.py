@@ -40,7 +40,7 @@ def output_class_list(olist):
 
 def output_class_list_w_meta(olist):
     # return human readable names plus fun stuff
-    return [+o['class_name']+' at '+o['location'] for o in olist]
+    return [o['class_name']+' at '+o['location'] for o in olist]
 
 def run_yolo8(image_input, image_name, bounding_box_option, confidence_level):
     # Run the YOLO model on the image
