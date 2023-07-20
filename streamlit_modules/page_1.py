@@ -8,21 +8,7 @@ from nlp.t5_common_gen import run_t5_common_gen
 import io
 import os
 from scenes.densenet import run_densenet
-
-def show_page(selected_cv_model, selected_nlp_model):
-    st.title('Model Testing')
-
-    st.header('Upload an image:')
-    uploaded_file = st.file_uploader("Choose an image file", type=["jpg", "jpeg", "png"])
-
-    st.header('Confidence Level:')
-    confidence_level = st.slider('Adjust the confidence level', min_value=0.0, max_value=1.0, value=0.5)
-
-    st.header('Bounding Boxes:')
-    bounding_box_option = st.radio('Would you like bounding boxes displayed?', ('Yes', 'No'))
-
-    # Add a button to run the model and generate a caption
-    from objects.yolo8 import output_class_list, output_class_list_w_meta
+import traceback
 
 def show_page(selected_cv_model, selected_nlp_model):
     st.title('Model Testing')
@@ -44,6 +30,7 @@ def show_page(selected_cv_model, selected_nlp_model):
 
         try:
             labels = None
+            raw_results = None
             if selected_cv_model == 'YOLOV8':
                 raw_results = run_yolo8(image_input, image_name, bounding_box_option, confidence_level)
                 labels = output_class_list_w_meta(raw_results)
@@ -66,7 +53,7 @@ def show_page(selected_cv_model, selected_nlp_model):
                 elif selected_nlp_model == 'T5_Common_Gen':
                     run_t5_common_gen(labels)
         except Exception as e:
-            st.error(f'No objects detected in the uploaded image: {e}')
+            st.error(f'Error: {traceback.format_exc()}')
 
 
 
