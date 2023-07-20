@@ -21,6 +21,8 @@ scene_model = torch.load('densenet_asgd_best.pt', map_location=device)
 
 def predict_scene(model, transforms, image, labels):
 #    image = Image.open(image_path)
+    if image.mode == 'RGBA':
+        image = image.convert('RGB')
     prepped_image = transforms(image)
     img_tensor = torch.unsqueeze(prepped_image, 0)
     model = model.to(device)
@@ -34,7 +36,7 @@ def predict_scene(model, transforms, image, labels):
 
 def run_densenet(raw_output, ilabels, image):
     predicted_label = predict_scene(scene_model, image_prep, image, labels)
-    ilabels.append('seen at '+predicted_label)
+    ilabels.append(predicted_label)
     raw_output.append({'scene': predicted_label})
 
     return ilabels, raw_output
