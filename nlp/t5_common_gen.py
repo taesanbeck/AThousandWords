@@ -12,22 +12,21 @@ class Run_T5_Common_Gen:
         result = self.happy_common_gen.generate_text(input_text, args=beam_args)
         return result.text
 
-def run_t5_common_gen(labels):
-    model_instance = Run_T5_Common_Gen()
-    input_text = ' '.join(labels)
-    generated_text = model_instance.generate_text(input_text)
+model_instance = Run_T5_Common_Gen()  # Instantiate outside the function
+
+def run_t5_common_gen(preprocessed_input):
+    # Convert list of labels to a string
+    input_string = ' '.join(preprocessed_input)
+
+    generated_text = model_instance.generate_text(input_string)
 
     # Display the generated text
     st.title('Generated Text:')
     st.text(generated_text)
 
     # Display the input text
-    st.subheader('Input Text:')
-    st.text(input_text)
+    st.header('Pre-Processed Computer Vision Labels:')
+    st.text(input_string)
 
-    # Generate audio file for generated text and play it
-    texttospeech(generated_text)  # Convert generated text to audio
-    audio_file = open("output.mp3", "rb")
-    st.audio(audio_file.read(), format='audio/mp3')  # Play audio
-    audio_file.close()
+    return generated_text
 

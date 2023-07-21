@@ -3,12 +3,13 @@ from objects.yolo3 import run_yolo3
 from PIL import Image
 import streamlit as st
 from tts.texttospeech import texttospeech  
-from nlp.t5_coco import generate_caption, model_instance, run_t5
+from actions.yolo_act import run_yolo_act, output_class_list_w_action
+from nlp.t5_coco import run_t5
 from nlp.t5_common_gen import run_t5_common_gen
+from scenes.densenet import run_densenet  # Assuming this is where your run_densenet function is located
 import io
 import os
-from scenes.densenet import run_densenet
-import traceback
+from nlp.preProcess import preprocess_labels
 
 def show_page(selected_cv_model, selected_nlp_model):
     st.title('Model Testing')
@@ -22,7 +23,7 @@ def show_page(selected_cv_model, selected_nlp_model):
     st.header('Bounding Boxes:')
     bounding_box_option = st.radio('Would you like bounding boxes displayed?', ('Yes', 'No'))
 
-    # Add a button to run the model and generate a caption
+     # Add a button to run the model and generate a caption
     if st.button('Run Models'):
         if uploaded_file is not None:
             image_input = Image.open(uploaded_file)
@@ -30,39 +31,105 @@ def show_page(selected_cv_model, selected_nlp_model):
 
         try:
             labels = None
-            raw_results = None
+            location_labels = None
             if selected_cv_model == 'YOLOV8':
                 raw_results = run_yolo8(image_input, image_name, bounding_box_option, confidence_level)
-                labels = output_class_list_w_meta(raw_results)
-                #if 'person' in output_class_list(raw_results):
-                    #run yolo actions, output updated labels
+                if 'person' in output_class_list(raw_results):
+                    raw_results = run_yolo_act(image_input,confidence_level,raw_results)
+                labels = output_class_list_w_action(raw_results)
+                location_labels = output_class_list_w_meta(raw_results)  # Extract location labels from the raw results
+
+                # run scene recognition, output updated labels
+                labels, raw_results = run_densenet(raw_results, labels, image_input)
+
+                # run ocr, output updated labels
+
+                if not labels:
+                    st.error('No objects detected in the uploaded image.')
+                    # Generate a default message
+                    default_message = "No objects detected in the image."
+                    texttospeech(default_message)  # Convert default_message to audio
+                    
+                    audio_file = open("output.mp3", "rb")
+                    st.audio(audio_file.read(), format='audio/mp3')  # Play audio
+                    audio_file.close()
+                else:
+                    # Create two columns
+                    col1, col2 = st.columns(2)
+
+                    # Column 1 - Human Readable Caption/Preprocessed
+                    with col1:
+                        # Preprocess labels here
+                        preprocessed_labels = preprocess_labels(labels)
+                        
+                        if preprocessed_labels:
+                            if selected_nlp_model == 'T5':
+                                caption = run_t5(preprocessed_labels) # Capture the returned caption
+                            elif selected_nlp_model == 'T5_Common_Gen':
+                                caption = run_t5_common_gen(preprocessed_labels) # Capture the returned caption
+                            
+
+                        objects = [label for label in labels if 'scene' not in label]
+                        if objects:
+                            st.header('Objects/Actions:')
+                            st.write(', '.join(objects))
+                        
+                        actions = [label for label in labels if 'action' in label]
+                        if actions:
+                            st.header('Actions:')
+                            st.write(', '.join(actions))
+
+                        scenes = [str(label['scene']) for label in raw_results if 'scene' in label]
+                        if scenes:
+                            st.header('Scenes:')
+                            st.write(', '.join(scenes))
+                    
+                    # Column 2 - Location data/OCR when I get it
+                    with col2:
+                        location_string = ''
+                        if location_labels:
+                            st.header('Location data:')
+                            st.write(location_labels)
+
+                            # Convert location_labels to string
+                            location_string = ', '.join(location_labels)
+                
+                # Combine caption and location data
+                combined_text = '. '.join([caption, location_string])
+                texttospeech(combined_text)  # Pass combined_text to your TTS function
+                
+                audio_file = open("output.mp3", "rb")
+                st.audio(audio_file.read(), format='audio/mp3')  # Play audio
+                audio_file.close()
+                        
             elif selected_cv_model == 'YOLOV3':
                 labels = run_yolo3(image_input, image_name, confidence_level, bounding_box_option)
+                labels = labels.split()
 
-            #run scene recognition, output updated labels
-            labels, raw_results = run_densenet(raw_results, labels, image_input)
+                if not labels:
+                    st.error('No objects detected in the uploaded image.')
+                    # Generate a default message
+                    default_message = "No objects detected in the image."
+                    texttospeech(default_message)  # Convert default_message to audio
+                                
+                    audio_file = open("output.mp3", "rb")
+                    st.audio(audio_file.read(), format='audio/mp3')  # Play audio
+                    audio_file.close()
+                else:
+                    if selected_nlp_model == 'T5':
+                        caption = run_t5(labels) # Capture the returned caption
+                    elif selected_nlp_model == 'T5_Common_Gen':
+                        caption = run_t5_common_gen(labels) # Capture the returned caption
+                    
+                    # convert the captions to speech
+                    texttospeech(caption)
+                    
+                    audio_file = open("output.mp3", "rb")
+                    st.audio(audio_file.read(), format='audio/mp3')  # Play audio
+                    audio_file.close()
 
-            #run ocr, output updated labels
 
-            if not labels:
-                st.error('No objects detected in the uploaded image.')
-            else:
-                # put any preprocessing here
-                if selected_nlp_model == 'T5':
-                    run_t5(labels)
-                elif selected_nlp_model == 'T5_Common_Gen':
-                    run_t5_common_gen(labels)
         except Exception as e:
-            st.error(f'Error: {traceback.format_exc()}')
+            st.error(f'Error: {e}')
 
-
-
-
-
-
-
-
-
-    
-    
 

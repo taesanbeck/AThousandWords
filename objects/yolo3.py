@@ -41,6 +41,8 @@ def run_yolo3(image_input, image_name, confidence_level, bounding_box_option):
     os.remove(output_image_path)
     os.rmdir(os.path.dirname(output_image_path))
     
+    labels = ' '.join(labels)
+ 
     return labels
 
 

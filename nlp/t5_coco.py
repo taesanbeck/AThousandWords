@@ -74,19 +74,15 @@ print("Generated Caption:", caption)
 import streamlit as st
 from tts.texttospeech import texttospeech
 
-def run_t5(labels):
-    caption = generate_caption(model_instance, labels)
+def run_t5(preprocessed_input):
+    caption = generate_caption(model_instance, preprocessed_input)  # input should be list of words
 
     # Display the generated sentence
     st.title('Generated Caption:')
     st.text(caption)
 
     # Display the labels
-    st.subheader('Computer Vision Labels:')
-    st.text(labels)
+    st.header('Pre-Processed Computer Vision Labels:')
+    st.text(preprocessed_input)
 
-    # Generate audio file for caption and play it
-    texttospeech(caption)  # Convert caption to audio
-    audio_file = open("output.mp3", "rb")
-    st.audio(audio_file.read(), format='audio/mp3')  # Play audio
-    audio_file.close()
+    return caption
