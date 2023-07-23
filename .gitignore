@@ -6,3 +6,4 @@ output.mp3
 /yolov8x.pt
 __pycache__
 *.pyc
+*.pt
