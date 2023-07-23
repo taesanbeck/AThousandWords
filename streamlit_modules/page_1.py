@@ -10,6 +10,10 @@ from scenes.densenet import run_densenet  # Assuming this is where your run_dens
 import io
 import os
 from nlp.preProcess import preprocess_labels
+from ocr.ocr import run_ocr
+from ocr.pre_proc_ocr import pre_process_ocr
+import cv2
+from objects.delete_imgs import delayed_delete
 
 def show_page(selected_cv_model, selected_nlp_model):
     st.title('Model Testing')
@@ -26,8 +30,13 @@ def show_page(selected_cv_model, selected_nlp_model):
      # Add a button to run the model and generate a caption
     if st.button('Run Models'):
         if uploaded_file is not None:
-            image_input = Image.open(uploaded_file)
+            image_data = uploaded_file.read()
+            image_input = Image.open(io.BytesIO(image_data))
             image_name = uploaded_file.name
+        
+        # Start the deletion countdown for the img_folder cleans every 3 min.
+        delayed_delete('./AThousandWords/objects/saved_img', 3*60)
+
 
         try:
             labels = None
@@ -41,9 +50,7 @@ def show_page(selected_cv_model, selected_nlp_model):
 
                 # run scene recognition, output updated labels
                 labels, raw_results = run_densenet(raw_results, labels, image_input)
-
-                # run ocr, output updated labels
-
+                
                 if not labels:
                     st.error('No objects detected in the uploaded image.')
                     # Generate a default message
@@ -63,7 +70,7 @@ def show_page(selected_cv_model, selected_nlp_model):
                         preprocessed_labels = preprocess_labels(labels)
                         
                         if preprocessed_labels:
-                            if selected_nlp_model == 'T5':
+                            if selected_nlp_model == 'T5_coco(BabyT5)':
                                 caption = run_t5(preprocessed_labels) # Capture the returned caption
                             elif selected_nlp_model == 'T5_Common_Gen':
                                 caption = run_t5_common_gen(preprocessed_labels) # Capture the returned caption
@@ -93,15 +100,32 @@ def show_page(selected_cv_model, selected_nlp_model):
 
                             # Convert location_labels to string
                             location_string = ', '.join(location_labels)
-                
-                # Combine caption and location data
-                combined_text = '. '.join([caption, location_string])
-                texttospeech(combined_text)  # Pass combined_text to your TTS function
-                
-                audio_file = open("output.mp3", "rb")
-                st.audio(audio_file.read(), format='audio/mp3')  # Play audio
-                audio_file.close()
                         
+                        #Get OCR predictions here
+                        st.header('OCR Results:')
+                        predicted_texts, image_with_boxes = run_ocr(image_data)
+                        image_with_boxes = cv2.cvtColor(image_with_boxes, cv2.COLOR_BGR2RGB)  # Convert from BGR to RGB
+                        st.image(image_with_boxes, use_column_width=False, width=200)  # Display the image 
+
+                        if predicted_texts:
+                            # Combine words into a single string
+                            ocr_statement = ' '.join(predicted_texts)
+                            st.write(ocr_statement)
+                            tts_statement = 'The image contains the following text: ' + ocr_statement  # This line is for the TTS function
+                        else:
+                            ocr_statement = "No text was detected in the image."
+                            st.write(ocr_statement)
+                            tts_statement = 'No text was detected in the image. ' # This line is for the TTS function
+
+                    # Combine caption, location, and OCR data
+                    combined_text = '. '.join([caption, location_string, tts_statement])
+
+                    texttospeech(combined_text)  # Pass combined_text to TTS function
+
+                    audio_file = open("output.mp3", "rb")
+                    st.audio(audio_file.read(), format='audio/mp3')  # Play audio
+                    audio_file.close()
+                
             elif selected_cv_model == 'YOLOV3':
                 labels = run_yolo3(image_input, image_name, confidence_level, bounding_box_option)
                 labels = labels.split()
@@ -116,7 +140,7 @@ def show_page(selected_cv_model, selected_nlp_model):
                     st.audio(audio_file.read(), format='audio/mp3')  # Play audio
                     audio_file.close()
                 else:
-                    if selected_nlp_model == 'T5':
+                    if selected_nlp_model == 'T5_coco(BabyT5)':
                         caption = run_t5(labels) # Capture the returned caption
                     elif selected_nlp_model == 'T5_Common_Gen':
                         caption = run_t5_common_gen(labels) # Capture the returned caption

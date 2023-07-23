@@ -7,3 +7,6 @@ t5_coco.pt
 output.mp3
 /yolov8x.pt
 /objects/saved_img/
+output.mp3
+__pycache__
+*.pyc
