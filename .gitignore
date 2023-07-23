@@ -1,12 +1,8 @@
 awsenv/
 .env
-.gitattributes
 yolo8x.pt
 Repo.code-workspace
-t5_coco.pt
 output.mp3
 /yolov8x.pt
-/objects/saved_img/
-output.mp3
 __pycache__
 *.pyc
