@@ -11,7 +11,6 @@ import io
 import os
 from nlp.preProcess import preprocess_labels
 from ocr.ocr import run_ocr
-from ocr.pre_proc_ocr import pre_process_ocr
 import cv2
 from objects.delete_imgs import delayed_delete
 
@@ -70,9 +69,9 @@ def show_page(selected_cv_model, selected_nlp_model):
                         preprocessed_labels = preprocess_labels(labels)
                         
                         if preprocessed_labels:
-                            if selected_nlp_model == 'T5_coco(BabyT5)':
+                            if selected_nlp_model == 'T5_Common_Gen':
                                 caption = run_t5(preprocessed_labels) # Capture the returned caption
-                            elif selected_nlp_model == 'T5_Common_Gen':
+                            elif selected_nlp_model == 'T5_coco(BabyT5)':
                                 caption = run_t5_common_gen(preprocessed_labels) # Capture the returned caption
                             
 
@@ -103,28 +102,30 @@ def show_page(selected_cv_model, selected_nlp_model):
                         
                         #Get OCR predictions here
                         st.header('OCR Results:')
-                        predicted_texts, image_with_boxes = run_ocr(image_data)
+                        predicted_texts, image_with_boxes = run_ocr(image_data, bounding_box_option)
                         image_with_boxes = cv2.cvtColor(image_with_boxes, cv2.COLOR_BGR2RGB)  # Convert from BGR to RGB
-                        st.image(image_with_boxes, use_column_width=False, width=200)  # Display the image 
+                        st.image(image_with_boxes, use_column_width=False, width=200)  # Display the image
 
                         if predicted_texts:
                             # Combine words into a single string
                             ocr_statement = ' '.join(predicted_texts)
+                            # add pauses in the text output
+                            ocr_tts_statement = ocr_statement.replace(' ', '... ')
                             st.write(ocr_statement)
-                            tts_statement = 'The image contains the following text: ' + ocr_statement  # This line is for the TTS function
+                            tts_statement = 'The image contains the following text: ' + ocr_tts_statement  # This line is for the TTS function
                         else:
                             ocr_statement = "No text was detected in the image."
                             st.write(ocr_statement)
                             tts_statement = 'No text was detected in the image. ' # This line is for the TTS function
 
-                    # Combine caption, location, and OCR data
-                    combined_text = '. '.join([caption, location_string, tts_statement])
+                # Combine caption, location, and OCR data
+                combined_text = '. '.join([caption, location_string, tts_statement])
 
-                    texttospeech(combined_text)  # Pass combined_text to TTS function
+                texttospeech(combined_text)  # Pass combined_text to TTS function
 
-                    audio_file = open("output.mp3", "rb")
-                    st.audio(audio_file.read(), format='audio/mp3')  # Play audio
-                    audio_file.close()
+                audio_file = open("output.mp3", "rb")
+                st.audio(audio_file.read(), format='audio/mp3')  # Play audio
+                audio_file.close()
                 
             elif selected_cv_model == 'YOLOV3':
                 labels = run_yolo3(image_input, image_name, confidence_level, bounding_box_option)
