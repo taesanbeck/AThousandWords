@@ -18,5 +18,5 @@ numpy==1.23.3
 python-dotenv==1.0.0
 sentencepiece==0.1.99
 happytransformer==2.4.1
-imageai
-inflect
+imageai==3.0.3
+inflect==6.0.5
