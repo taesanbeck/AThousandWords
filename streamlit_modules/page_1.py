@@ -70,9 +70,9 @@ def show_page(selected_cv_model, selected_nlp_model):
                         
                         if preprocessed_labels:
                             if selected_nlp_model == 'T5_Common_Gen':
-                                caption = run_t5(preprocessed_labels) # Capture the returned caption
+                                caption = run_t5_common_gen(preprocessed_labels) # Capture the returned caption 
                             elif selected_nlp_model == 'T5_coco(BabyT5)':
-                                caption = run_t5_common_gen(preprocessed_labels) # Capture the returned caption
+                                caption = run_t5(preprocessed_labels) # Capture the returned caption 
                             
 
                         objects = [label for label in labels if 'scene' not in label]
@@ -120,6 +120,7 @@ def show_page(selected_cv_model, selected_nlp_model):
 
                 # Combine caption, location, and OCR data
                 combined_text = '. '.join([caption, location_string, tts_statement])
+                print(combined_text)
 
                 texttospeech(combined_text)  # Pass combined_text to TTS function
 
@@ -141,10 +142,10 @@ def show_page(selected_cv_model, selected_nlp_model):
                     st.audio(audio_file.read(), format='audio/mp3')  # Play audio
                     audio_file.close()
                 else:
-                    if selected_nlp_model == 'T5_coco(BabyT5)':
-                        caption = run_t5(labels) # Capture the returned caption
-                    elif selected_nlp_model == 'T5_Common_Gen':
+                    if selected_nlp_model == 'T5_Common_Gen': 
                         caption = run_t5_common_gen(labels) # Capture the returned caption
+                    elif selected_nlp_model == 'T5_coco(BabyT5)': 
+                        caption = run_t5(labels) # Capture the returned caption
                     
                     # convert the captions to speech
                     texttospeech(caption)

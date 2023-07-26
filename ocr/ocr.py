@@ -8,7 +8,7 @@ import io
 # Get a set of three pre-trained models
 pipeline = keras_ocr.pipeline.Pipeline()
 
-def run_ocr(image_data, show_bounding_boxes):
+def run_ocr(image_data, bounding_box_option):
     # Convert BytesIO to PIL Image
     image_input = Image.open(io.BytesIO(image_data))
 
@@ -32,7 +32,7 @@ def run_ocr(image_data, show_bounding_boxes):
         boxes = [box for _, box, _ in predicted_texts]
         scores = [score for _, _, score in predicted_texts]
         # Iterate over the boxes and draw rectangles on the image
-        if show_bounding_boxes == 'Yes':
+        if bounding_box_option == 'Yes':
             for box, score in zip(boxes, scores):
                 # keras-ocr returns boxes as lists of points apparently and We need to convert these to tuples(this was a pain to understand)
                 # Also, OpenCV expects coordinates as integers
