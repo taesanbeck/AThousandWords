@@ -14,29 +14,29 @@ def run_ocr(image_data, bounding_box_option):
 
     # Convert PIL Image to RGB and then to numpy array for OpenCV
     image_input_rgb = image_input.convert("RGB")
-    image = np.array(image_input_rgb)  # Convert the image to a numpy array
-    image_with_boxes = image.copy()  # Copy the image. We'll draw bounding boxes on this copy
+    image_with_boxes = np.array(image_input_rgb)  # Renamed variable to match show_page function
 
-    prediction_groups = pipeline.recognize([image])  # Not the copy with potential boxes
+    prediction_groups = pipeline.recognize([image_with_boxes])
+    predicted_texts = [(text, box) for text, box in prediction_groups[0]]  # Also store box coordinates
 
-    if not prediction_groups or not prediction_groups[0]:  # Check if prediction_groups is empty or contains an empty group
-        return [], image  # Return original image if no text found
-
-    predicted_texts = [word_box[0] for word_box in prediction_groups[0]]  # Extract texts
-
-    if bounding_box_option == 'Yes':
-        boxes = [word_box[1] for word_box in prediction_groups[0]]  # Extract boxes only if needed
-        # Iterate over the boxes and draw rectangles on the image
-        for box in boxes:
-            # keras-ocr returns boxes as lists of points apparently and We need to convert these to tuples(this was a pain to understand)
-            # Also, OpenCV expects coordinates as integers
-            box = [(int(x), int(y)) for x, y in box]
-            cv2.polylines(image_with_boxes, [np.array(box)], isClosed=True, color=(0, 255, 0), thickness=2)
-
-        return predicted_texts, image_with_boxes
-
+    # If no text found...
+    if not predicted_texts:
+        return [], image_with_boxes  # Return original image if no text found
     else:
-        return predicted_texts, image
+        texts = [text for text, _ in predicted_texts]  # Separate texts into a different variable
+        boxes = [box for _, box in predicted_texts]  # Boxes in separate variable
+        # Iterate over the boxes and draw rectangles on the image only if bounding_box_option is 'Yes'
+        if bounding_box_option == 'Yes':
+            for box in boxes:
+                # keras-ocr returns boxes as lists of points apparently and We need to convert these to tuples(this was a pain to understand)
+                # Also, OpenCV expects coordinates as integers
+                box = [(int(x), int(y)) for x, y in box]
+                cv2.polylines(image_with_boxes, [np.array(box)], isClosed=True, color=(0, 255, 0), thickness=2)
+
+    return texts, image_with_boxes  # Return texts and image_with_boxes
+
+
+
 
 
 
