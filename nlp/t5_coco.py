@@ -81,8 +81,28 @@ def run_t5(preprocessed_input):
     st.title('Generated Caption:')
     st.text(caption)
 
+    
+    # Convert list of labels to a string
+    input_string = ' '.join(preprocessed_input)
+    
     # Display the labels
     st.header('Pre-Processed Computer Vision Labels:')
-    st.text(preprocessed_input)
+    st.text(input_string)
 
     return caption
+
+def run_t5_common_gen(preprocessed_input):
+    # Convert list of labels to a string
+    input_string = ' '.join(preprocessed_input)
+
+    generated_text = model_instance.generate_text(input_string)
+
+    # Display the generated text
+    st.title('Generated Text:')
+    st.text(generated_text)
+
+    # Display the input text
+    st.header('Pre-Processed Computer Vision Labels:')
+    st.text(input_string)
+
+    return generated_text
