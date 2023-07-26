@@ -14,35 +14,41 @@ def run_ocr(image_data, bounding_box_option):
 
     # Convert PIL Image to RGB and then to numpy array for OpenCV
     image_input_rgb = image_input.convert("RGB")
-    image_array = np.array(image_input_rgb)
+    image_with_boxes = np.array(image_input_rgb)
 
-    prediction_groups = pipeline.recognize([image_array])
+    prediction_groups = pipeline.recognize([image_with_boxes])
     
-    # Check if confidence scores are available
-    if len(prediction_groups[0][0]) == 3:
-        predicted_texts = [(text, box, score) for text, box, score in prediction_groups[0]]  # Also store box coordinates and confidence scores
-    else:
-        predicted_texts = [(text, box, None) for text, box in prediction_groups[0]]  # Also store box coordinates but no confidence scores
+    # Check if prediction_groups is not empty
+    if prediction_groups and prediction_groups[0]:
+        # Check if confidence scores are available
+        if len(prediction_groups[0][0]) == 3:
+            predicted_texts = [(text, box, score) for text, box, score in prediction_groups[0]]  # Also store box coordinates and confidence scores
+        else:
+            predicted_texts = [(text, box, None) for text, box in prediction_groups[0]]  # Also store box coordinates but no confidence scores
 
-    # If no text found...
-    if not predicted_texts:
-        return [], image_array  # Return original image if no text found
-    else:
-        texts = [text for text, _, _ in predicted_texts]
-        boxes = [box for _, box, _ in predicted_texts]
-        scores = [score for _, _, score in predicted_texts]
-        # Iterate over the boxes and draw rectangles on the image
-        if bounding_box_option == 'Yes':
-            for box, score in zip(boxes, scores):
-                # keras-ocr returns boxes as lists of points apparently and We need to convert these to tuples(this was a pain to understand)
-                # Also, OpenCV expects coordinates as integers
-                box = [(int(x), int(y)) for x, y in box]
-                cv2.polylines(image_array, [np.array(box)], isClosed=True, color=(0, 255, 0), thickness=2)
-                if score is not None:
-                    # Draw confidence score on the image
-                    cv2.putText(image_array, f"{score:.2f}", (box[0][0], box[0][1] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (36,255,12), 2)
+        # If no text found...
+        if not predicted_texts:
+            return [], image_with_boxes  # Return original image if no text found
+        else:
+            predicted_texts = [text for text, _, _ in predicted_texts if predicted_texts]
+            boxes = [box for _, box, _ in predicted_texts if predicted_texts]
+            scores = [score for _, _, score in predicted_texts if predicted_texts]
+            # Iterate over the boxes and draw rectangles on the image
+            if bounding_box_option == 'Yes':
+                for box, score in zip(boxes, scores):
+                    # keras-ocr returns boxes as lists of points apparently and We need to convert these to tuples(this was a pain to understand)
+                    # Also, OpenCV expects coordinates as integers
+                    box = [(int(x), int(y)) for x, y in box]
+                    cv2.polylines(image_with_boxes, [np.array(box)], isClosed=True, color=(0, 255, 0), thickness=2)
+                    if score is not None:
+                        # Draw confidence score on the image
+                        cv2.putText(image_with_boxes, f"{score:.2f}", (box[0][0], box[0][1] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (36,255,12), 2)
 
-    return texts, image_array
+    else:
+        return [], image_with_boxes  # Return original image if no prediction_groups found
+
+    return predicted_texts, image_with_boxes
+
 
 
 
