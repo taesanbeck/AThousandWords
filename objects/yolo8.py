@@ -49,7 +49,7 @@ def run_yolo8(image_input, image_name, bounding_box_option, confidence_level):
     if bounding_box_option == 'No':
         results, image_output = standalone_yolo(image_input, confidence=confidence_level, save_img=False, image_name=image_name)
 
-    st.image(image_output, caption='Uploaded Image', use_column_width=True)  # Display the uploaded image
+    st.image(image_output, caption='Uploaded Image', width=700)  # Display the uploaded image
     
     return results  # Return labels as a list and the raw results as a list of dicts
 

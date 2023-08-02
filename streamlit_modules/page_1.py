@@ -103,7 +103,7 @@ def show_page(selected_cv_model, selected_nlp_model):
                         #Get OCR predictions here
                         st.header('OCR Results:')
                         predicted_texts, image_with_boxes = run_ocr(image_data, bounding_box_option)
-                        image_with_boxes = cv2.cvtColor(image_with_boxes, cv2.COLOR_BGR2RGB)  # Convert from BGR to RGB
+                  
                         st.image(image_with_boxes, use_column_width=False, width=200)  # Display the image
 
                         if predicted_texts:
