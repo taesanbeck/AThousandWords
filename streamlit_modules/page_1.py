@@ -13,6 +13,7 @@ from nlp.preProcess import preprocess_labels
 from ocr.ocr import run_ocr
 import cv2
 from objects.delete_imgs import delayed_delete
+from PIL import Image, ExifTags
 
 def show_page(selected_cv_model, selected_nlp_model):
     st.title('Model Testing')
@@ -33,8 +34,25 @@ def show_page(selected_cv_model, selected_nlp_model):
             image_input = Image.open(io.BytesIO(image_data))
             image_name = uploaded_file.name
         
-        # Start the deletion countdown for the img_folder cleans every 3 min.
-        delayed_delete('./AThousandWords/objects/saved_img', 3*60)
+            # Check if the image has EXIF(Orientation) data for iPhone rotation issue
+            if hasattr(image_input, '_getexif'):
+                exif_data = image_input._getexif()
+                if exif_data:
+                    # Get the orientation tag from the EXIF data
+                    orientation_tag = ExifTags.TAGS.get('Orientation')
+                    orientation = exif_data.get(orientation_tag)
+                    
+                    # Rotate the image based on its orientation
+                    if orientation == 3:
+                        image_input = image_input.rotate(180, expand=True)
+                    elif orientation == 6:
+                        image_input = image_input.rotate(270, expand=True)
+                    elif orientation == 8:
+                        image_input = image_input.rotate(90, expand=True)
+        
+        
+        # delete all files in the `saved_img` directory every 3 minutes
+        delayed_delete('../AThousandWords/objects/saved_img', 3*60)
 
 
         try:
