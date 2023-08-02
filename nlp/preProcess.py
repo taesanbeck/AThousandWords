@@ -1,11 +1,14 @@
 # nlp/preProcess.py
 from collections import Counter
 import inflect  # to deal with plurals
+from num2words import num2words  # for number to word conversion
 
 # Sources that helped, but I had to do a lot of tweaking
 # https://pypi.org/project/inflect/
 # https://stackoverflow.com/questions/12206276/how-to-check-if-given-word-is-in-plural-or-singular-form
 # https://realpython.com/python-counter/
+#https://pypi.org/project/num2words/
+# https://www.geeksforgeeks.org/python-number-to-words-using-num2words/#
 
 def preprocess_labels(labels):
     p = inflect.engine()
@@ -44,8 +47,9 @@ def preprocess_labels(labels):
                 label = f"{object} {action}"
             else:
                 label = p.plural(label)
-
-        # Add label (or its plural) and its count to processed_labels
-        processed_labels.append(f"{count} {label}")
+            # Convert count to word using num2words and add label (or its plural) and its count to processed_labels
+            processed_labels.append(f"{num2words(count)} {label}")
+        else:
+            processed_labels.append(f"a {label}")
 
     return processed_labels

@@ -20,3 +20,6 @@ sentencepiece==0.1.99
 happytransformer==2.4.1
 imageai==3.0.3
 inflect==6.0.5
+num2words==0.5.12
+docopt==0.6.2
+
