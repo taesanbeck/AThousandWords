@@ -50,6 +50,6 @@ def preprocess_labels(labels):
             # Convert count to word using num2words and add label (or its plural) and its count to processed_labels
             processed_labels.append(f"{num2words(count)} {label}")
         else:
-            processed_labels.append(f"a {label}")
+            processed_labels.append(f"{label}")
 
     return processed_labels
