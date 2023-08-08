@@ -5,15 +5,14 @@ import keras_ocr
 from PIL import Image
 import io
 import math
-import streamlit as st
 
 # Get a set of three pre-trained models
 pipeline = keras_ocr.pipeline.Pipeline()
 
-def rotate(box):
+def rotate(box,longest,TL,TR):
   
-  tl = box[0][0]
-  tr = box[0][1]
+  tl = box[longest][TL]
+  tr = box[longest][TR]
   z = (tl[1]-tr[1])/(tr[0]-tl[0])
   rad = math.atan(z)
   s = math.sin(rad)
@@ -30,13 +29,28 @@ def rotate(box):
 
   return boxt
 
-def order_of_words(box):
-    if box[0][0][1] != box[0][1][1]:
-       box = rotate(box)
+def order_of_words(box,text):
+    word_length = [len(i) for i in text]
+    longest = word_length.index(max(word_length))
+    zero_one = math.dist(box[longest][0], box[longest][1])
+    one_two = math.dist(box[longest][1], box[longest][2])
+    if zero_one > one_two:
+      TL = 0
+      TR = 1
+      BR = 2
+      BL = 3
+    else:
+      TL = 1
+      TR = 2
+      BR = 3
+      BL = 0
 
-    tly = [-1*point[0][1] for point in box]
-    bry = [-1*point[2][1] for point in box]
-    tlx = [point[0][0] for point in box]
+    if box[longest][TL][1] != box[longest][TR][1]:
+       box = rotate(box,longest,TL,TR)
+    
+    tly = [-1*point[TL][1] for point in box]
+    bry = [-1*point[BR][1] for point in box]
+    tlx = [point[TL][0] for point in box]
     words = [item for item in range(0, len(box))]
     runs = 0
 
@@ -48,7 +62,14 @@ def order_of_words(box):
       maxy = words[wordsy.index(max(wordsy))]
 
       for z in words:
-        if tly[z] > bry[maxy]: #if top y value of a word is higher than bottom y of the highest word, then they're added to the same line. Includes itself 
+        A = tly[maxy]
+        B = bry[maxy]
+        a = tly[z]
+        if bry[z] < B:
+          b = B
+        else: 
+          b = bry[z]
+        if ((a-b)/(A-B)) > .40: #if top y value of a word is higher than bottom y of the highest word, then they're added to the same line. Includes itself 
           temp.append(z)
       xtemp = [tlx[i] for i in temp] #create list of x values for the words in the line
       xsort = sorted(xtemp) #sort the x values for the words in a line in ascending order
@@ -85,7 +106,7 @@ def run_ocr(image_data, bounding_box_option):
                 # Also, OpenCV expects coordinates as integers
                 box = [(int(x), int(y)) for x, y in box]
                 cv2.polylines(image_with_boxes, [np.array(box)], isClosed=True, color=(0, 255, 0), thickness=2)
-        order = order_of_words(boxes)
+        order = order_of_words(boxes,texts)
         text_order = [texts[i] for i in order]
 
     return text_order, image_with_boxes  # Return texts and image_with_boxes
