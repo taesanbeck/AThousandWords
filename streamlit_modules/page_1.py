@@ -16,6 +16,7 @@ from objects.delete_imgs import delayed_delete
 from PIL import Image, ExifTags
 
 def show_page(selected_cv_model, selected_nlp_model):
+
     st.title('Model Testing')
 
     st.header('Upload an image:')
