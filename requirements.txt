@@ -3,7 +3,7 @@ inflect
 keras_ocr
 streamlit
 nltk
-opencv_python
+opencv_python==4.8.0.74
 pandas
 Pillow
 pytorch_lightning
