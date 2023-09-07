@@ -4,7 +4,7 @@ from PIL import Image
 import streamlit as st
 
 def run_yolo3(image_input, image_name, confidence_level, bounding_box_option):
-    execution_path = "/home/taesanbeck/AThousandWords/AThousandWords"
+    execution_path = "../AThousandWords"
     detector = ObjectDetection()
     detector.setModelTypeAsYOLOv3()
     detector.setModelPath(os.path.join(execution_path , "yolov3.pt"))
