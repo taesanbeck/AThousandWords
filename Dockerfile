@@ -11,7 +11,7 @@ COPY . /app
 RUN pip install --upgrade pip==23.2.1
 
 # Fixes the libgl error
-RUN apt-get update && apt-get install -y libgl1-mesa-
+RUN apt-get update && apt-get install -y libgl1-mesa-glx
 
 # Fixes C2v Deployment error
 RUN apt-get update && apt-get install -y libsm6 libxext6 libxrender-dev
