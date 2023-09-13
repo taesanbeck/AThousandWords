@@ -10,6 +10,9 @@ COPY . /app
 # Upgrade pip to version 23.2.1
 RUN pip install --upgrade pip==23.2.1
 
+# Fixes the libgl error
+RUN apt-get update && apt-get install -y libgl1-mesa-glx
+
 # Install any needed packages specified in requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
