@@ -1,6 +1,9 @@
 import os
 import threading
 
+print(os.getcwd())
+
+
 # Function to delete files at a specified path
 def delete_files(path):
     # Iterate over each file in the specified directory
@@ -20,11 +23,16 @@ def delete_files(path):
 
 # Function to initiate delayed deletion of files
 def delayed_delete(path, delay):
+    # Schedule the delete_files function to run after `delay` seconds.
+    threading.Timer(delay, periodic_delete, [path, delay]).start()
+
+# Function to periodically delete files every `delay` seconds.
+def periodic_delete(path, delay):
     # Delete the files at the path
     delete_files(path)
-    # Schedule the next call for delayed_delete function after `delay` seconds.
-    # The function calls itself, creating a cycle that continues every `delay` seconds.
-    threading.Timer(delay, delayed_delete, [path, delay]).start()
+    # Schedule the next call for periodic_delete function after `delay` seconds.
+    threading.Timer(delay, periodic_delete, [path, delay]).start()
+
 
 
 
