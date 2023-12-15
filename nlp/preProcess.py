@@ -1,7 +1,9 @@
 # nlp/preProcess.py
 from collections import Counter
 import inflect  # to deal with plurals
-from num2words import num2words  # for number to word conversion
+from num2words import num2words
+import streamlit as st
+# for number to word conversion
 
 # Sources that helped, but I had to do a lot of tweaking
 # https://pypi.org/project/inflect/
@@ -10,6 +12,7 @@ from num2words import num2words  # for number to word conversion
 #https://pypi.org/project/num2words/
 # https://www.geeksforgeeks.org/python-number-to-words-using-num2words/#
 
+@st.cache_resource
 def preprocess_labels(labels):
     p = inflect.engine()
 
